@@ -225,12 +225,12 @@ public class MainOptionsActivity extends BaseActivity implements CalendarGridAda
 
     private void showNextCoachMessage() {
         if (coachTurnIndex < 2) {
-            binding.ivCoachImage.setImageResource(R.drawable.yellow_devil_muscle);
+            binding.ivCoachImage.setImageResource(R.drawable.devil_muscle_yellow);
             binding.tvCoachTitle.setText("Coach Diablillo");
             int rIdx = new java.util.Random().nextInt(yellowRoasts.length);
             binding.tvDiablilloSpeech.setText(yellowRoasts[rIdx]);
         } else {
-            binding.ivCoachImage.setImageResource(R.drawable.blue_devil_water);
+            binding.ivCoachImage.setImageResource(R.drawable.devil_water_blue);
             binding.tvCoachTitle.setText("Coach Hidratación 💧");
             int bIdx = new java.util.Random().nextInt(blueHydration.length);
             binding.tvDiablilloSpeech.setText(blueHydration[bIdx]);

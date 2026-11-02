@@ -71,7 +71,7 @@
                             android:layout_width="80dp"
                             android:layout_height="80dp"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/yellow_devil_muscle"
+                            android:src="@drawable/devil_muscle_yellow"
                             android:contentDescription="Coach Character" />
 
                         <LinearLayout
@@ -323,7 +323,7 @@
                         <ImageView
                             android:layout_width="56dp"
                             android:layout_height="56dp"
-                            android:src="@drawable/purple_devil_see_routines"
+                            android:src="@drawable/devil_routine_see_purple"
                             android:scaleType="fitCenter"
                             android:contentDescription="@string/btn_see_routines" />
 
@@ -371,7 +371,7 @@
                         <ImageView
                             android:layout_width="56dp"
                             android:layout_height="56dp"
-                            android:src="@drawable/purple_devil_create_routine"
+                            android:src="@drawable/devil_routine_create_purple"
                             android:scaleType="fitCenter"
                             android:contentDescription="@string/btn_start_new" />
 

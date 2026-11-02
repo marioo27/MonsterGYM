@@ -131,7 +131,7 @@ public class WorkoutDataManager {
                 }
 
                 String imageName = rutObj.has("image") ? rutObj.optString("image", "") : rutObj.optString("imagen", "");
-                int imageRes = getDrawableResId(context, imageName, R.drawable.red_devil_mad);
+                int imageRes = getDrawableResId(context, imageName, R.drawable.devil_mad_red);
 
                 Routine routine = new Routine(
                         id,
@@ -164,7 +164,7 @@ public class WorkoutDataManager {
         }
 
         String imageName = exObj.has("image") ? exObj.optString("image", "") : exObj.optString("imagen", "");
-        int imageRes = getDrawableResId(appContext, imageName, R.drawable.red_devil_mad);
+        int imageRes = getDrawableResId(appContext, imageName, R.drawable.devil_mad_red);
 
         return new Exercise(
                 id,
@@ -209,7 +209,7 @@ public class WorkoutDataManager {
         double primaryWeight = !setWeights.isEmpty() ? setWeights.get(0) : 0.0;
 
         String imageName = varObj.has("image") ? varObj.optString("image", "") : varObj.optString("imagen", "");
-        int imageRes = getDrawableResId(appContext, imageName, R.drawable.red_devil_mad);
+        int imageRes = getDrawableResId(appContext, imageName, R.drawable.devil_mad_red);
 
         ExerciseVariation variation = new ExerciseVariation(
                 id,
@@ -538,7 +538,7 @@ public class WorkoutDataManager {
                 }
 
                 String imageName = rutObj.has("image") ? rutObj.optString("image", "") : rutObj.optString("imagen", "");
-                int imageRes = getDrawableResId(appContext, imageName, R.drawable.red_devil_mad);
+                int imageRes = getDrawableResId(appContext, imageName, R.drawable.devil_mad_red);
 
                 Routine routine = new Routine(
                         id,

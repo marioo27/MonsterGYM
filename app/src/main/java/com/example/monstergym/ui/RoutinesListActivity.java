@@ -110,7 +110,7 @@ public class RoutinesListActivity extends BaseActivity implements RoutineAdapter
     public void onEditRoutine(Routine routine) {
         DialogCreateRoutineBinding dialogBinding = DialogCreateRoutineBinding.inflate(LayoutInflater.from(this));
 
-        final int[] selectedImage = {routine.getImageResource() != 0 ? routine.getImageResource() : R.drawable.red_devil_mad};
+        final int[] selectedImage = {routine.getImageResource() != 0 ? routine.getImageResource() : R.drawable.devil_mad_red};
         dialogBinding.ivRoutineIconSelect.setImageResource(selectedImage[0]);
 
         dialogBinding.llSelectRoutineImage.setOnClickListener(v -> {
@@ -185,7 +185,7 @@ public class RoutinesListActivity extends BaseActivity implements RoutineAdapter
     private void showCreateRoutineDialog() {
         DialogCreateRoutineBinding dialogBinding = DialogCreateRoutineBinding.inflate(LayoutInflater.from(this));
 
-        final int[] selectedImage = {R.drawable.red_devil_mad};
+        final int[] selectedImage = {R.drawable.devil_mad_red};
         dialogBinding.ivRoutineIconSelect.setImageResource(selectedImage[0]);
 
         dialogBinding.llSelectRoutineImage.setOnClickListener(v -> {

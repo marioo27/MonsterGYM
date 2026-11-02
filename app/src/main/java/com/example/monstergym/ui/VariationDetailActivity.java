@@ -35,7 +35,7 @@ public class VariationDetailActivity extends BaseActivity {
     private ExerciseVariation currentVariation;
     private final List<TextInputEditText> setWeightInputFields = new ArrayList<>();
     private boolean isUpdatingSetsUI = false;
-    private int selectedImageResId = R.drawable.red_devil_mad;
+    private int selectedImageResId = R.drawable.devil_mad_red;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

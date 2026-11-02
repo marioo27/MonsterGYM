@@ -135,7 +135,7 @@ public class RoutineDetailActivity extends BaseActivity implements ExerciseAdapt
     public void onEditExercise(Exercise exercise) {
         DialogCreateExerciseBinding dialogBinding = DialogCreateExerciseBinding.inflate(LayoutInflater.from(this));
 
-        final int[] selectedImage = {exercise.getImageResource() != 0 ? exercise.getImageResource() : R.drawable.red_devil_mad};
+        final int[] selectedImage = {exercise.getImageResource() != 0 ? exercise.getImageResource() : R.drawable.devil_mad_red};
         dialogBinding.ivExerciseIconSelect.setImageResource(selectedImage[0]);
 
         dialogBinding.llSelectExerciseImage.setOnClickListener(v -> {
@@ -202,7 +202,7 @@ public class RoutineDetailActivity extends BaseActivity implements ExerciseAdapt
         if (currentRoutine == null) return;
         DialogCreateRoutineBinding dialogBinding = DialogCreateRoutineBinding.inflate(LayoutInflater.from(this));
 
-        final int[] selectedImage = {currentRoutine.getImageResource() != 0 ? currentRoutine.getImageResource() : R.drawable.red_devil_mad};
+        final int[] selectedImage = {currentRoutine.getImageResource() != 0 ? currentRoutine.getImageResource() : R.drawable.devil_mad_red};
         dialogBinding.ivRoutineIconSelect.setImageResource(selectedImage[0]);
 
         dialogBinding.llSelectRoutineImage.setOnClickListener(v -> {
@@ -283,7 +283,7 @@ public class RoutineDetailActivity extends BaseActivity implements ExerciseAdapt
         DialogCreateExerciseBinding dialogBinding = DialogCreateExerciseBinding.inflate(LayoutInflater.from(this));
         dialogBinding.btnDeleteExercise.setVisibility(View.GONE);
 
-        final int[] selectedImage = {R.drawable.red_devil_mad};
+        final int[] selectedImage = {R.drawable.devil_mad_red};
         dialogBinding.ivExerciseIconSelect.setImageResource(selectedImage[0]);
 
         dialogBinding.llSelectExerciseImage.setOnClickListener(v -> {

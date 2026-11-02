@@ -124,7 +124,7 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.RoutineV
             if (routine.getImageResource() != 0 && routine.getImageResource() != R.drawable.ic_dumbbell) {
                 binding.ivRoutineIcon.setImageResource(routine.getImageResource());
             } else {
-                binding.ivRoutineIcon.setImageResource(R.drawable.red_devil_mad);
+                binding.ivRoutineIcon.setImageResource(R.drawable.devil_mad_red);
             }
 
             binding.getRoot().setOnClickListener(v -> {

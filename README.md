@@ -85,17 +85,17 @@ The file must contain a `routines` array. Each routine can include main exercise
       "name": "Tren Superior",
       "description": "Lunes y Jueves",
       "abbreviation": "SUP",
-      "image": "red_devil_mad",
+      "image": "devil_mad_red",
       "exercises": [
         {
           "id": "ejercicio_jalon",
           "name": "Jalón",
-          "image": "red_devil_mad",
+          "image": "devil_mad_red",
           "variations": [
             {
               "id": "variacion_jalon_maquina",
               "name": "Máquina",
-              "image": "red_devil_mad",
+              "image": "devil_mad_red",
               "sets": [
                 {
                   "number": 1,
@@ -157,6 +157,13 @@ com.example.monstergym/
 ├── ui/          # Activities (MainOptions, RoutinesList, RoutineDetail, VariationsList, VariationDetail, Calendar, Welcome)
 └── utils/       # Helpers (DevilImagePickerHelper)
 ```
+
+## 😈 Mascots & Avatars
+The app features customizable mascot characters for your routines and exercises:
+
+| Coach Purple | Hydration Blue | Strength Yellow |
+| :---: | :---: | :---: |
+| <img src="app/src/main/res-devils/drawable/devil_routine_see_purple.png" width="100"/> | <img src="app/src/main/res-devils/drawable/devil_water_blue.png" width="100"/> | <img src="app/src/main/res-devils/drawable/devil_muscle_yellow.png" width="100"/> |
 
 ## 📸 Screenshots
 *App screenshots will be added soon.*
@@ -238,17 +245,17 @@ El archivo debe contener un array llamado `routines`. Cada rutina puede incluir 
       "name": "Tren Superior",
       "description": "Lunes y Jueves",
       "abbreviation": "SUP",
-      "image": "red_devil_mad",
+      "image": "devil_mad_red",
       "exercises": [
         {
           "id": "ejercicio_jalon",
           "name": "Jalón",
-          "image": "red_devil_mad",
+          "image": "devil_mad_red",
           "variations": [
             {
               "id": "variacion_jalon_maquina",
               "name": "Máquina",
-              "image": "red_devil_mad",
+              "image": "devil_mad_red",
               "sets": [
                 {
                   "number": 1,
@@ -310,6 +317,13 @@ com.example.monstergym/
 ├── ui/          # Actividades (MainOptions, RoutinesList, RoutineDetail, VariationsList, VariationDetail, Calendar, Welcome)
 └── utils/       # Utilidades (DevilImagePickerHelper)
 ```
+
+## 😈 Avatares y Personajes
+La aplicación cuenta con avatares de personajes personalizados para tus rutinas y ejercicios:
+
+| Coach Púrpura | Hidratación Azul | Fuerza Amarillo |
+| :---: | :---: | :---: |
+| <img src="app/src/main/res-devils/drawable/devil_routine_see_purple.png" width="100"/> | <img src="app/src/main/res-devils/drawable/devil_water_blue.png" width="100"/> | <img src="app/src/main/res-devils/drawable/devil_muscle_yellow.png" width="100"/> |
 
 ## 📸 Capturas de Pantalla
 *Las capturas de pantalla de la aplicación se añadirán próximamente.*

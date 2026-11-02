@@ -72,7 +72,7 @@
                             android:layout_height="60dp"
                             android:layout_gravity="center"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/red_devil_mad"
+                            android:src="@drawable/devil_mad_red"
                             android:contentDescription="@null" />
                     </com.google.android.material.card.MaterialCardView>
 

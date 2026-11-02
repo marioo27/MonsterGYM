@@ -116,7 +116,7 @@ public class VariationAdapter extends RecyclerView.Adapter<VariationAdapter.Vari
             if (variation.getImageResource() != 0 && variation.getImageResource() != R.drawable.image_placeholder) {
                 binding.ivVariationImage.setImageResource(variation.getImageResource());
             } else {
-                binding.ivVariationImage.setImageResource(R.drawable.red_devil_mad);
+                binding.ivVariationImage.setImageResource(R.drawable.devil_mad_red);
             }
 
             binding.getRoot().setOnClickListener(v -> {

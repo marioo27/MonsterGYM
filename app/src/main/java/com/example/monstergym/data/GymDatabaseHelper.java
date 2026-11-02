@@ -365,7 +365,7 @@ public class GymDatabaseHelper extends SQLiteOpenHelper {
                 int rDescRes = rCursor.getInt(rCursor.getColumnIndexOrThrow("description_res_id"));
                 int rImage = rCursor.getInt(rCursor.getColumnIndexOrThrow("image_resource"));
                 if (rImage == 0 || rImage == R.drawable.ic_dumbbell) {
-                    rImage = R.drawable.red_devil_mad;
+                    rImage = R.drawable.devil_mad_red;
                 }
 
                 List<Exercise> exercises = getExercisesForRoutine(db, rId);
@@ -388,7 +388,7 @@ public class GymDatabaseHelper extends SQLiteOpenHelper {
                 int exNameRes = exCursor.getInt(exCursor.getColumnIndexOrThrow("name_res_id"));
                 int exImage = exCursor.getInt(exCursor.getColumnIndexOrThrow("image_resource"));
                 if (exImage == 0 || exImage == R.drawable.image_placeholder) {
-                    exImage = R.drawable.red_devil_mad;
+                    exImage = R.drawable.devil_mad_red;
                 }
                 boolean isExtra = exCursor.getInt(exCursor.getColumnIndexOrThrow("is_extra")) == 1;
 
@@ -419,7 +419,7 @@ public class GymDatabaseHelper extends SQLiteOpenHelper {
                 int notesRes = varCursor.getInt(varCursor.getColumnIndexOrThrow("notes_res_id"));
                 int image = varCursor.getInt(varCursor.getColumnIndexOrThrow("image_resource"));
                 if (image == 0 || image == R.drawable.image_placeholder) {
-                    image = R.drawable.red_devil_mad;
+                    image = R.drawable.devil_mad_red;
                 }
 
                 List<Double> setWeights = getSetWeightsForVariation(db, varId);

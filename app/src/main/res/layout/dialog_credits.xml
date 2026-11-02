@@ -10,7 +10,7 @@
     <ImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@drawable/yellow_devil_muscle"
+        android:src="@drawable/devil_muscle_yellow"
         android:scaleType="fitCenter"
         android:contentDescription="Logo"
         android:layout_marginBottom="12dp" />

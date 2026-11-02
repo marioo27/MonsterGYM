@@ -180,6 +180,7 @@
     <string name="label_set_number">Serie %d</string>
     <string name="msg_no_lower_body_variations">Los ejercicios de tren inferior no tienen variaciones.</string>
     <string name="error_future_date">No puedes registrar entrenamientos en días futuros.</string>
-    <string name="select_devil_image_title">Seleccionar Coach Diablillo</string>
+    <string name="select_devil_image_title">Seleccionar Personaje</string>
+    <string name="select_devil_color_title">Seleccionar Color</string>
     <string name="change_image_hint">Toca la imagen para cambiar de Diablillo</string>
 </resources>

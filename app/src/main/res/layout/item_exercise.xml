@@ -32,7 +32,7 @@
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/red_devil_mad"
+                android:src="@drawable/devil_mad_red"
                 android:contentDescription="@null" />
 
             <LinearLayout
