@@ -15,8 +15,11 @@
             {
               "id": "variacion_jalon_maquina",
               "name": "Máquina",
-              "notes": "Una serie de 32kg para calentar",
+              "notes": "",
               "image": "devil_hanging_purple",
+              "has_warmup": true,
+              "warmup_weight": 32,
+              "warmup_reps": 10,
               "sets": [
                 {
                   "number": 1,
@@ -70,6 +73,9 @@
               "name": "Máquina",
               "notes": "",
               "image": "devil_row_yellow",
+              "has_warmup": true,
+              "warmup_weight": 37,
+              "warmup_reps": 10,
               "sets": [
                 {
                   "number": 1,
@@ -121,7 +127,7 @@
             {
               "id": "variacion_press_pecho_mancuernas",
               "name": "Press plano con mancuernas",
-              "notes": "",
+              "notes": "15kg??",
               "image": "devil_bar_red",
               "sets": [
                 {
@@ -414,17 +420,17 @@
               "sets": [
                 {
                   "number": 1,
-                  "weight_kg": 5,
+                  "weight_kg": 7.5,
                   "reps": 10
                 },
                 {
                   "number": 2,
-                  "weight_kg": 5,
+                  "weight_kg": 7.5,
                   "reps": 10
                 },
                 {
                   "number": 3,
-                  "weight_kg": 5,
+                  "weight_kg": 7.5,
                   "reps": 10
                 }
               ]
@@ -515,17 +521,17 @@
               "sets": [
                 {
                   "number": 1,
-                  "weight_kg": 0,
+                  "weight_kg": 10,
                   "reps": 10
                 },
                 {
                   "number": 2,
-                  "weight_kg": 0,
+                  "weight_kg": 10,
                   "reps": 10
                 },
                 {
                   "number": 3,
-                  "weight_kg": 0,
+                  "weight_kg": 10,
                   "reps": 10
                 }
               ]
@@ -604,6 +610,9 @@
               "name": "Jaca",
               "notes": "",
               "image": "devil_dumbell_jumping_purple",
+              "has_warmup": true,
+              "warmup_weight": 0,
+              "warmup_reps": 10,
               "sets": [
                 {
                   "number": 1,
@@ -818,39 +827,74 @@
   ],
   "workout_logs": [
     {
-      "date": "2026-10-08",
+      "date": "2026-11-24",
+      "routine_id": "rutina_tren_superior",
+      "routine_name": "Tren Superior",
+      "notes": "",
+      "timestamp": 1795510276880
+    },
+    {
+      "date": "2026-11-21",
+      "routine_id": "rutina_tren_superior",
+      "routine_name": "Tren Superior",
+      "notes": "",
+      "timestamp": 1795252584723
+    },
+    {
+      "date": "2026-11-20",
+      "routine_id": "rutina_tren_superior",
+      "routine_name": "Tren Superior",
+      "notes": "",
+      "timestamp": 1795217265503
+    },
+    {
+      "date": "2026-11-16",
       "routine_id": "rutina_tren_inferior",
       "routine_name": "Tren Inferior",
       "notes": "",
-      "timestamp": 1792148968955
+      "timestamp": 1794816297259
     },
     {
-      "date": "2026-10-19",
+      "date": "2026-11-10",
       "routine_id": "rutina_tren_superior",
       "routine_name": "Tren Superior",
       "notes": "",
-      "timestamp": 1792394210796
+      "timestamp": 1794812652820
     },
     {
-      "date": "2026-09-29",
+      "date": "2026-11-06",
       "routine_id": "rutina_tren_superior",
       "routine_name": "Tren Superior",
       "notes": "",
-      "timestamp": 1792148957576
+      "timestamp": 1794812657940
     },
     {
-      "date": "2026-10-06",
+      "date": "2026-10-30",
       "routine_id": "rutina_tren_superior",
       "routine_name": "Tren Superior",
       "notes": "",
-      "timestamp": 1792148961953
+      "timestamp": 1793348643193
     },
     {
-      "date": "2026-10-09",
+      "date": "2026-10-27",
+      "routine_id": "rutina_tren_inferior",
+      "routine_name": "Tren Inferior",
+      "notes": "",
+      "timestamp": 1793258868279
+    },
+    {
+      "date": "2026-10-26",
       "routine_id": "rutina_tren_superior",
       "routine_name": "Tren Superior",
       "notes": "",
-      "timestamp": 1792148972283
+      "timestamp": 1793001736101
+    },
+    {
+      "date": "2026-10-23",
+      "routine_id": "rutina_tren_superior",
+      "routine_name": "Tren Superior",
+      "notes": "",
+      "timestamp": 1792743288046
     },
     {
       "date": "2026-10-21",
@@ -860,6 +904,13 @@
       "timestamp": 1792568363359
     },
     {
+      "date": "2026-10-19",
+      "routine_id": "rutina_tren_superior",
+      "routine_name": "Tren Superior",
+      "notes": "",
+      "timestamp": 1792394210796
+    },
+    {
       "date": "2026-10-15",
       "routine_id": "rutina_tren_superior",
       "routine_name": "Tren Superior",
@@ -867,18 +918,46 @@
       "timestamp": 1792148981433
     },
     {
-      "date": "2026-09-28",
-      "routine_id": "rutina_tren_inferior",
-      "routine_name": "Tren Inferior",
-      "notes": "",
-      "timestamp": 1792148950851
-    },
-    {
       "date": "2026-10-12",
       "routine_id": "rutina_tren_inferior",
       "routine_name": "Tren Inferior",
       "notes": "",
       "timestamp": 1792148978569
+    },
+    {
+      "date": "2026-10-09",
+      "routine_id": "rutina_tren_superior",
+      "routine_name": "Tren Superior",
+      "notes": "",
+      "timestamp": 1792148972283
+    },
+    {
+      "date": "2026-10-08",
+      "routine_id": "rutina_tren_inferior",
+      "routine_name": "Tren Inferior",
+      "notes": "",
+      "timestamp": 1792148968955
+    },
+    {
+      "date": "2026-10-06",
+      "routine_id": "rutina_tren_superior",
+      "routine_name": "Tren Superior",
+      "notes": "",
+      "timestamp": 1792148961953
+    },
+    {
+      "date": "2026-09-29",
+      "routine_id": "rutina_tren_superior",
+      "routine_name": "Tren Superior",
+      "notes": "",
+      "timestamp": 1792148957576
+    },
+    {
+      "date": "2026-09-28",
+      "routine_id": "rutina_tren_inferior",
+      "routine_name": "Tren Inferior",
+      "notes": "",
+      "timestamp": 1792148950851
     }
   ]
 }

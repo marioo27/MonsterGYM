@@ -20,6 +20,9 @@ public class ExerciseVariation implements Serializable {
     private String notes;
     private int notesResId;
     private int imageResource;
+    private boolean hasWarmupSet;
+    private double warmupWeight;
+    private int warmupReps;
 
     public ExerciseVariation() {
         this.weightUnit = "kg";
@@ -208,7 +211,31 @@ public class ExerciseVariation implements Serializable {
         }
     }
 
-    private String formatDouble(double val) {
+    public boolean hasWarmupSet() {
+        return hasWarmupSet;
+    }
+
+    public void setHasWarmupSet(boolean hasWarmupSet) {
+        this.hasWarmupSet = hasWarmupSet;
+    }
+
+    public double getWarmupWeight() {
+        return warmupWeight;
+    }
+
+    public void setWarmupWeight(double warmupWeight) {
+        this.warmupWeight = warmupWeight;
+    }
+
+    public int getWarmupReps() {
+        return warmupReps <= 0 ? 10 : warmupReps;
+    }
+
+    public void setWarmupReps(int warmupReps) {
+        this.warmupReps = warmupReps;
+    }
+
+    public String formatDouble(double val) {
         if (val == (long) val) {
             return String.format(Locale.US, "%d", (long) val);
         } else {

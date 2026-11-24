@@ -52,6 +52,19 @@ public class VariationDetailActivity extends BaseActivity {
 
         setupToolbar();
         setupSetsWatcher();
+
+        binding.cbSameWeightAllSets.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isUpdatingSetsUI) return;
+            updateSetWeightsEnableState();
+            if (isChecked) {
+                syncSetWeightsToFirstSet();
+            }
+        });
+
+        binding.cbHasWarmupSet.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.llWarmupContainer.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+        });
+
         loadVariationData();
 
         binding.llSelectVariationImage.setOnClickListener(v -> {
@@ -111,6 +124,36 @@ public class VariationDetailActivity extends BaseActivity {
         return weights;
     }
 
+    private boolean areAllWeightsEqual(List<Double> weights) {
+        if (weights == null || weights.size() <= 1) return true;
+        double first = weights.get(0);
+        for (int i = 1; i < weights.size(); i++) {
+            if (Math.abs(weights.get(i) - first) > 0.0001) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void syncSetWeightsToFirstSet() {
+        if (setWeightInputFields.isEmpty()) return;
+        String firstText = setWeightInputFields.get(0).getText() != null ? setWeightInputFields.get(0).getText().toString() : "";
+        isUpdatingSetsUI = true;
+        for (int i = 1; i < setWeightInputFields.size(); i++) {
+            setWeightInputFields.get(i).setText(firstText);
+        }
+        isUpdatingSetsUI = false;
+    }
+
+    private void updateSetWeightsEnableState() {
+        boolean sameWeight = binding.cbSameWeightAllSets.isChecked();
+        for (int i = 1; i < setWeightInputFields.size(); i++) {
+            TextInputEditText et = setWeightInputFields.get(i);
+            et.setEnabled(!sameWeight);
+            et.setAlpha(sameWeight ? 0.6f : 1.0f);
+        }
+    }
+
     private void renderSetWeightInputs(int numSets, List<Double> initialWeights) {
         isUpdatingSetsUI = true;
         setWeightInputFields.clear();
@@ -147,16 +190,42 @@ public class VariationDetailActivity extends BaseActivity {
             );
             tilParams.rightMargin = dpToPx(8);
             til.setLayoutParams(tilParams);
+            til.setBoxBackgroundColor(Color.parseColor("#1E293B"));
+            til.setBoxStrokeColor(Color.parseColor("#BBDEFB"));
+            til.setHintTextColor(android.content.res.ColorStateList.valueOf(Color.parseColor("#BBDEFB")));
+            til.setDefaultHintTextColor(android.content.res.ColorStateList.valueOf(Color.parseColor("#BBDEFB")));
 
             TextInputEditText et = new TextInputEditText(til.getContext());
             et.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
             et.setTextColor(Color.WHITE);
+            et.setHintTextColor(Color.parseColor("#BBDEFB"));
             
             double val = 0.0;
             if (initialWeights != null && i < initialWeights.size()) {
                 val = initialWeights.get(i);
             }
             et.setText(formatDouble(val));
+
+            if (i == 0) {
+                et.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        if (isUpdatingSetsUI) return;
+                        if (binding.cbSameWeightAllSets.isChecked()) {
+                            syncSetWeightsToFirstSet();
+                        }
+                    }
+                });
+            } else {
+                et.setEnabled(!binding.cbSameWeightAllSets.isChecked());
+                et.setAlpha(binding.cbSameWeightAllSets.isChecked() ? 0.6f : 1.0f);
+            }
 
             til.addView(et);
             setWeightInputFields.add(et);
@@ -195,11 +264,19 @@ public class VariationDetailActivity extends BaseActivity {
             currentVariation = WorkoutDataManager.getInstance().getVariationById(routineId, exerciseId, variationId);
         }
 
+        boolean allSame = currentVariation == null || areAllWeightsEqual(currentVariation.getSetWeights());
+        binding.cbSameWeightAllSets.setChecked(allSame);
+
         if (currentVariation != null) {
             binding.etVariationName.setText(currentVariation.getDisplayName(this));
             binding.etSets.setText(String.valueOf(currentVariation.getSets()));
             binding.etReps.setText(String.valueOf(currentVariation.getRepetitions()));
             binding.etNotes.setText(currentVariation.getDisplayNotes(this));
+
+            binding.cbHasWarmupSet.setChecked(currentVariation.hasWarmupSet());
+            binding.llWarmupContainer.setVisibility(currentVariation.hasWarmupSet() ? View.VISIBLE : View.GONE);
+            binding.etWarmupWeight.setText(formatDouble(currentVariation.getWarmupWeight()));
+            binding.etWarmupReps.setText(String.valueOf(currentVariation.getWarmupReps()));
 
             if (currentVariation.getImageResource() != 0) {
                 selectedImageResId = currentVariation.getImageResource();
@@ -212,6 +289,10 @@ public class VariationDetailActivity extends BaseActivity {
             // New variation defaults (initialized to 0 weight for all sets)
             binding.etSets.setText("3");
             binding.etReps.setText("10");
+            binding.cbHasWarmupSet.setChecked(false);
+            binding.llWarmupContainer.setVisibility(View.GONE);
+            binding.etWarmupWeight.setText("0");
+            binding.etWarmupReps.setText("10");
 
             List<Double> initialZeroWeights = new ArrayList<>();
             initialZeroWeights.add(0.0);
@@ -273,6 +354,20 @@ public class VariationDetailActivity extends BaseActivity {
 
         double primaryWeight = !setWeights.isEmpty() ? setWeights.get(0) : 0.0;
 
+        boolean hasWarmup = binding.cbHasWarmupSet.isChecked();
+        double warmupWeight = 0.0;
+        int warmupReps = 10;
+        if (hasWarmup) {
+            try {
+                String wStr = binding.etWarmupWeight.getText() != null ? binding.etWarmupWeight.getText().toString().trim() : "";
+                if (!TextUtils.isEmpty(wStr)) warmupWeight = Double.parseDouble(wStr);
+            } catch (Exception ignored) {}
+            try {
+                String rStr = binding.etWarmupReps.getText() != null ? binding.etWarmupReps.getText().toString().trim() : "";
+                if (!TextUtils.isEmpty(rStr)) warmupReps = Integer.parseInt(rStr);
+            } catch (Exception ignored) {}
+        }
+
         if (currentVariation != null) {
             currentVariation.setName(name);
             currentVariation.setNameResId(0);
@@ -285,6 +380,9 @@ public class VariationDetailActivity extends BaseActivity {
             currentVariation.setNotes(notes);
             currentVariation.setNotesResId(0);
             currentVariation.setImageResource(selectedImageResId);
+            currentVariation.setHasWarmupSet(hasWarmup);
+            currentVariation.setWarmupWeight(warmupWeight);
+            currentVariation.setWarmupReps(warmupReps);
 
             WorkoutDataManager.getInstance().updateVariation(routineId, exerciseId, currentVariation);
         } else {
@@ -296,6 +394,9 @@ public class VariationDetailActivity extends BaseActivity {
                     selectedImageResId
             );
             newVar.setSetWeights(setWeights);
+            newVar.setHasWarmupSet(hasWarmup);
+            newVar.setWarmupWeight(warmupWeight);
+            newVar.setWarmupReps(warmupReps);
             WorkoutDataManager.getInstance().addVariation(routineId, exerciseId, newVar);
         }
 

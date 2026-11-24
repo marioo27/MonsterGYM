@@ -24,36 +24,42 @@
         <activity
             android:name=".ui.MainOptionsActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustResize"
             android:label="@string/options_title" />
 
         <!-- Routines List Screen -->
         <activity
             android:name=".ui.RoutinesListActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustResize"
             android:label="@string/routines_title" />
 
         <!-- Routine Detail Screen -->
         <activity
             android:name=".ui.RoutineDetailActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustResize"
             android:label="@string/app_name" />
 
         <!-- Variations List Screen -->
         <activity
             android:name=".ui.VariationsListActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustResize"
             android:label="@string/variations_title" />
 
         <!-- Variation Detail / Edit Screen -->
         <activity
             android:name=".ui.VariationDetailActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustResize"
             android:label="@string/edit_variation_title" />
 
         <!-- Calendar Screen -->
         <activity
             android:name=".ui.CalendarActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustResize"
             android:label="@string/calendar_title" />
 
     </application>

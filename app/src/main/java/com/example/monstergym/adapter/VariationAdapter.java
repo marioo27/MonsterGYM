@@ -101,7 +101,11 @@ public class VariationAdapter extends RecyclerView.Adapter<VariationAdapter.Vari
         public void bind(ExerciseVariation variation, Context context, OnVariationClickListener listener, OnStartDragListener dragListener) {
             binding.tvVariationName.setText(variation.getDisplayName(context));
 
-            String setsRepsWeight = context.getString(R.string.sets_reps_format, variation.getSets(), variation.getRepetitions())
+            String setsRepsWeight = "";
+            if (variation.hasWarmupSet()) {
+                setsRepsWeight += "Calentamiento: " + variation.getWarmupReps() + " reps (" + variation.formatDouble(variation.getWarmupWeight()) + " " + variation.getWeightUnit() + ")\n";
+            }
+            setsRepsWeight += context.getString(R.string.sets_reps_format, variation.getSets(), variation.getRepetitions())
                     + " • " + variation.getDisplayWeights() + " " + variation.getWeightUnit();
             binding.tvSetsRepsWeight.setText(setsRepsWeight);
 

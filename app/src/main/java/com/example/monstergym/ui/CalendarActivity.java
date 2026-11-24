@@ -377,7 +377,9 @@ public class CalendarActivity extends BaseActivity implements WorkoutLogAdapter.
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dialogBinding.spinnerRoutines.setAdapter(adapter);
 
-        WorkoutLog existingLog = WorkoutDataManager.getInstance().getWorkoutLog(targetDateStr);
+        final WorkoutLog existingLog = WorkoutDataManager.getInstance().getWorkoutLog(targetDateStr);
+        final String savedCompletedVars = existingLog != null ? existingLog.getCompletedVariations() : null;
+
         if (existingLog != null) {
             dialogBinding.switchAttended.setChecked(true);
             dialogBinding.llRoutineDetails.setVisibility(View.VISIBLE);
@@ -401,9 +403,34 @@ public class CalendarActivity extends BaseActivity implements WorkoutLogAdapter.
                 dialogBinding.spinnerRoutines.setSelection(index);
             }
         } else {
-            dialogBinding.switchAttended.setChecked(true); // Default to ON when registering
+            dialogBinding.switchAttended.setChecked(true);
             dialogBinding.llRoutineDetails.setVisibility(View.VISIBLE);
             dialogBinding.btnDeleteLog.setVisibility(View.GONE);
+        }
+
+        dialogBinding.spinnerRoutines.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+                if (routines != null && position >= 0 && position < routines.size()) {
+                    Routine r = routines.get(position);
+                    boolean isSameRoutineAsSaved = existingLog != null && r.getId().equals(existingLog.getRoutineId());
+                    populateExerciseCheckboxes(CalendarActivity.this, dialogBinding.llExerciseSelectionContainer, r, isSameRoutineAsSaved ? savedCompletedVars : null);
+                } else {
+                    dialogBinding.llExerciseSelectionContainer.removeAllViews();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> parent) {
+                dialogBinding.llExerciseSelectionContainer.removeAllViews();
+            }
+        });
+
+        int initialPos = dialogBinding.spinnerRoutines.getSelectedItemPosition();
+        if (routines != null && initialPos >= 0 && initialPos < routines.size()) {
+            Routine initialRoutine = routines.get(initialPos);
+            boolean isSameRoutineAsSaved = existingLog != null && initialRoutine.getId().equals(existingLog.getRoutineId());
+            populateExerciseCheckboxes(this, dialogBinding.llExerciseSelectionContainer, initialRoutine, isSameRoutineAsSaved ? savedCompletedVars : null);
         }
 
         dialogBinding.switchAttended.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -426,14 +453,27 @@ public class CalendarActivity extends BaseActivity implements WorkoutLogAdapter.
                                 routineName = routineNames.get(0);
                             }
 
+                            List<String> checkedKeys = new ArrayList<>();
+                            for (int i = 0; i < dialogBinding.llExerciseSelectionContainer.getChildCount(); i++) {
+                                View child = dialogBinding.llExerciseSelectionContainer.getChildAt(i);
+                                if (child instanceof com.google.android.material.checkbox.MaterialCheckBox) {
+                                    com.google.android.material.checkbox.MaterialCheckBox cb = (com.google.android.material.checkbox.MaterialCheckBox) child;
+                                    if (cb.isChecked() && cb.getTag() != null) {
+                                        checkedKeys.add(cb.getTag().toString());
+                                    }
+                                }
+                            }
+
                             String notes = dialogBinding.etLogNotes.getText() != null ? dialogBinding.etLogNotes.getText().toString().trim() : "";
+                            String completedVars = TextUtils.join(",", checkedKeys);
 
                             WorkoutLog log = new WorkoutLog(
                                     targetDateStr,
                                     routineId,
                                     routineName,
                                     notes,
-                                    System.currentTimeMillis()
+                                    System.currentTimeMillis(),
+                                    completedVars
                             );
                             WorkoutDataManager.getInstance().saveWorkoutLog(log);
                         } else {
@@ -454,5 +494,102 @@ public class CalendarActivity extends BaseActivity implements WorkoutLogAdapter.
             refreshAllData();
             dialog.dismiss();
         });
+    }
+
+    private void populateExerciseCheckboxes(android.content.Context context, android.widget.LinearLayout container, Routine routine, String savedCompletedVars) {
+        container.removeAllViews();
+        if (routine == null || routine.getExercises() == null || routine.getExercises().isEmpty()) {
+            android.widget.TextView tvEmpty = new android.widget.TextView(context);
+            tvEmpty.setText("No hay ejercicios en esta rutina.");
+            tvEmpty.setTextColor(android.graphics.Color.GRAY);
+            tvEmpty.setTextSize(13);
+            container.addView(tvEmpty);
+            return;
+        }
+
+        java.util.Set<String> savedSet = new java.util.HashSet<>();
+        if (!TextUtils.isEmpty(savedCompletedVars)) {
+            String[] parts = savedCompletedVars.split(",");
+            for (String p : parts) {
+                if (!p.trim().isEmpty()) savedSet.add(p.trim());
+            }
+        }
+        boolean isNewLog = (savedCompletedVars == null);
+
+        List<com.example.monstergym.model.Exercise> mainExercises = new ArrayList<>();
+        List<com.example.monstergym.model.Exercise> extraExercises = new ArrayList<>();
+        for (com.example.monstergym.model.Exercise ex : routine.getExercises()) {
+            if (ex.isExtra()) {
+                extraExercises.add(ex);
+            } else {
+                mainExercises.add(ex);
+            }
+        }
+
+        renderExerciseGroup(context, container, "EJERCICIOS PRINCIPALES", mainExercises, savedSet, isNewLog);
+        if (!extraExercises.isEmpty()) {
+            renderExerciseGroup(context, container, "EJERCICIOS EXTRA", extraExercises, savedSet, isNewLog);
+        }
+    }
+
+    private void renderExerciseGroup(android.content.Context context, android.widget.LinearLayout container, String headerTitle, List<com.example.monstergym.model.Exercise> exercises, java.util.Set<String> savedSet, boolean isNewLog) {
+        if (exercises.isEmpty()) return;
+
+        android.widget.TextView tvHeader = new android.widget.TextView(context);
+        tvHeader.setText(headerTitle);
+        tvHeader.setTextSize(12);
+        tvHeader.setTypeface(null, android.graphics.Typeface.BOLD);
+        tvHeader.setTextColor(android.graphics.Color.parseColor("#1976D2"));
+        tvHeader.setPadding(0, 8, 0, 4);
+        container.addView(tvHeader);
+
+        for (com.example.monstergym.model.Exercise ex : exercises) {
+            android.widget.TextView tvExName = new android.widget.TextView(context);
+            String title = ex.getDisplayName(context);
+            if (ex.isExtra()) title += " [EXTRA]";
+            tvExName.setText(title);
+            tvExName.setTextSize(14);
+            tvExName.setTypeface(null, android.graphics.Typeface.BOLD);
+            tvExName.setTextColor(android.graphics.Color.parseColor("#212121"));
+            tvExName.setPadding(8, 6, 0, 2);
+            container.addView(tvExName);
+
+            List<com.example.monstergym.model.ExerciseVariation> variations = ex.getVariations();
+            if (variations != null && !variations.isEmpty()) {
+                for (com.example.monstergym.model.ExerciseVariation var : variations) {
+                    com.google.android.material.checkbox.MaterialCheckBox cb = new com.google.android.material.checkbox.MaterialCheckBox(context);
+                    String itemKey = ex.getId() + "::" + var.getId();
+                    cb.setTag(itemKey);
+
+                    String varLabel = " • " + var.getDisplayName(context) + " (" + var.getSets() + "x" + var.getRepetitions() + ")";
+                    cb.setText(varLabel);
+                    cb.setTextSize(13);
+                    cb.setTextColor(android.graphics.Color.parseColor("#424242"));
+                    cb.setPadding(16, 0, 0, 0);
+
+                    if (isNewLog) {
+                        cb.setChecked(!ex.isExtra());
+                    } else {
+                        cb.setChecked(savedSet.contains(itemKey) || savedSet.contains(var.getId()));
+                    }
+                    container.addView(cb);
+                }
+            } else {
+                com.google.android.material.checkbox.MaterialCheckBox cb = new com.google.android.material.checkbox.MaterialCheckBox(context);
+                String itemKey = ex.getId();
+                cb.setTag(itemKey);
+                cb.setText(" • " + ex.getDisplayName(context));
+                cb.setTextSize(13);
+                cb.setTextColor(android.graphics.Color.parseColor("#424242"));
+                cb.setPadding(16, 0, 0, 0);
+
+                if (isNewLog) {
+                    cb.setChecked(!ex.isExtra());
+                } else {
+                    cb.setChecked(savedSet.contains(itemKey));
+                }
+                container.addView(cb);
+            }
+        }
     }
 }

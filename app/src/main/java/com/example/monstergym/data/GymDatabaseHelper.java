@@ -69,7 +69,10 @@ public class GymDatabaseHelper extends SQLiteOpenHelper {
                 + "notes TEXT, "
                 + "notes_res_id INTEGER, "
                 + "image_resource INTEGER, "
-                + "position INTEGER"
+                + "position INTEGER, "
+                + "has_warmup INTEGER DEFAULT 0, "
+                + "warmup_weight REAL DEFAULT 0.0, "
+                + "warmup_reps INTEGER DEFAULT 10"
                 + ");");
 
         // Create Set Weights Table
@@ -274,7 +277,14 @@ public class GymDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    private void ensureVariationWarmupColumns(SQLiteDatabase db) {
+        try { db.execSQL("ALTER TABLE " + TABLE_VARIATIONS + " ADD COLUMN has_warmup INTEGER DEFAULT 0;"); } catch (Exception ignored) {}
+        try { db.execSQL("ALTER TABLE " + TABLE_VARIATIONS + " ADD COLUMN warmup_weight REAL DEFAULT 0.0;"); } catch (Exception ignored) {}
+        try { db.execSQL("ALTER TABLE " + TABLE_VARIATIONS + " ADD COLUMN warmup_reps INTEGER DEFAULT 10;"); } catch (Exception ignored) {}
+    }
+
     private void insertVariationInternal(SQLiteDatabase db, String exerciseId, ExerciseVariation variation, int position) {
+        ensureVariationWarmupColumns(db);
         ContentValues cv = new ContentValues();
         cv.put("id", variation.getId());
         cv.put("exercise_id", exerciseId);
@@ -289,6 +299,9 @@ public class GymDatabaseHelper extends SQLiteOpenHelper {
         cv.put("notes_res_id", variation.getNotesResId());
         cv.put("image_resource", variation.getImageResource());
         cv.put("position", position);
+        cv.put("has_warmup", variation.hasWarmupSet() ? 1 : 0);
+        cv.put("warmup_weight", variation.getWarmupWeight());
+        cv.put("warmup_reps", variation.getWarmupReps());
         db.insertWithOnConflict(TABLE_VARIATIONS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
 
         // Save Set Weights
@@ -309,6 +322,7 @@ public class GymDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
+            ensureVariationWarmupColumns(db);
             ContentValues cv = new ContentValues();
             cv.put("name", variation.getName());
             cv.put("name_res_id", variation.getNameResId());
@@ -320,6 +334,9 @@ public class GymDatabaseHelper extends SQLiteOpenHelper {
             cv.put("notes", variation.getNotes());
             cv.put("notes_res_id", variation.getNotesResId());
             cv.put("image_resource", variation.getImageResource());
+            cv.put("has_warmup", variation.hasWarmupSet() ? 1 : 0);
+            cv.put("warmup_weight", variation.getWarmupWeight());
+            cv.put("warmup_reps", variation.getWarmupReps());
             db.update(TABLE_VARIATIONS, cv, "id = ?", new String[]{variation.getId()});
 
             db.delete(TABLE_SET_WEIGHTS, "variation_id = ?", new String[]{variation.getId()});
@@ -422,9 +439,39 @@ public class GymDatabaseHelper extends SQLiteOpenHelper {
                     image = R.drawable.devil_mad_red;
                 }
 
+                boolean hasWarmup = false;
+                double warmupWeight = 0.0;
+                int warmupReps = 10;
+                int hIdx = varCursor.getColumnIndex("has_warmup");
+                if (hIdx != -1) hasWarmup = varCursor.getInt(hIdx) == 1;
+                int wIdx = varCursor.getColumnIndex("warmup_weight");
+                if (wIdx != -1) warmupWeight = varCursor.getDouble(wIdx);
+                int rIdx = varCursor.getColumnIndex("warmup_reps");
+                if (rIdx != -1) warmupReps = varCursor.getInt(rIdx);
+
+                if ("variacion_jalon_maquina".equals(varId)) {
+                    hasWarmup = true;
+                    warmupWeight = 32.0;
+                    if ("Una serie de 32kg para calentar".equalsIgnoreCase(notes)) {
+                        notes = "";
+                    }
+                } else if ("variacion_remo_maquina".equals(varId)) {
+                    hasWarmup = true;
+                    warmupWeight = 37.0;
+                    if (notes != null && notes.toLowerCase().contains("calentar")) {
+                        notes = "";
+                    }
+                } else if ("variacion_sentadilla_jaca".equals(varId)) {
+                    hasWarmup = true;
+                    warmupWeight = 0.0;
+                }
+
                 List<Double> setWeights = getSetWeightsForVariation(db, varId);
 
                 ExerciseVariation variation = new ExerciseVariation(varId, varName, varNameRes, sets, reps, weight, unit, rest, notes, notesRes, image);
+                variation.setHasWarmupSet(hasWarmup);
+                variation.setWarmupWeight(warmupWeight);
+                variation.setWarmupReps(warmupReps);
                 if (setWeights != null && !setWeights.isEmpty()) {
                     variation.setSetWeights(setWeights);
                 }
@@ -448,17 +495,25 @@ public class GymDatabaseHelper extends SQLiteOpenHelper {
         return setWeights;
     }
 
+    private void ensureWorkoutLogTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_WORKOUT_LOGS + " ("
+                + "date TEXT PRIMARY KEY, "
+                + "routine_id TEXT, "
+                + "routine_name TEXT, "
+                + "notes TEXT, "
+                + "timestamp INTEGER, "
+                + "completed_variations TEXT"
+                + ");");
+        try {
+            db.execSQL("ALTER TABLE " + TABLE_WORKOUT_LOGS + " ADD COLUMN completed_variations TEXT;");
+        } catch (Exception ignored) {}
+    }
+
     public void saveWorkoutLog(WorkoutLog log) {
         if (log == null || log.getDate() == null) return;
         try {
             SQLiteDatabase db = getWritableDatabase();
-            db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_WORKOUT_LOGS + " ("
-                    + "date TEXT PRIMARY KEY, "
-                    + "routine_id TEXT, "
-                    + "routine_name TEXT, "
-                    + "notes TEXT, "
-                    + "timestamp INTEGER"
-                    + ");");
+            ensureWorkoutLogTable(db);
 
             ContentValues cv = new ContentValues();
             cv.put("date", log.getDate());
@@ -466,6 +521,7 @@ public class GymDatabaseHelper extends SQLiteOpenHelper {
             cv.put("routine_name", log.getRoutineName() != null ? log.getRoutineName() : "");
             cv.put("notes", log.getNotes() != null ? log.getNotes() : "");
             cv.put("timestamp", log.getTimestamp());
+            cv.put("completed_variations", log.getCompletedVariations() != null ? log.getCompletedVariations() : "");
             db.insertWithOnConflict(TABLE_WORKOUT_LOGS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
         } catch (Exception e) {
             e.printStackTrace();
@@ -476,13 +532,7 @@ public class GymDatabaseHelper extends SQLiteOpenHelper {
         if (date == null) return;
         try {
             SQLiteDatabase db = getWritableDatabase();
-            db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_WORKOUT_LOGS + " ("
-                    + "date TEXT PRIMARY KEY, "
-                    + "routine_id TEXT, "
-                    + "routine_name TEXT, "
-                    + "notes TEXT, "
-                    + "timestamp INTEGER"
-                    + ");");
+            ensureWorkoutLogTable(db);
             db.delete(TABLE_WORKOUT_LOGS, "date = ?", new String[]{date});
         } catch (Exception e) {
             e.printStackTrace();
@@ -501,7 +551,12 @@ public class GymDatabaseHelper extends SQLiteOpenHelper {
                     String rName = cursor.getString(cursor.getColumnIndexOrThrow("routine_name"));
                     String notes = cursor.getString(cursor.getColumnIndexOrThrow("notes"));
                     long ts = cursor.getLong(cursor.getColumnIndexOrThrow("timestamp"));
-                    log = new WorkoutLog(date, rId, rName, notes, ts);
+                    String completedVars = "";
+                    int compIdx = cursor.getColumnIndex("completed_variations");
+                    if (compIdx != -1) {
+                        completedVars = cursor.getString(compIdx);
+                    }
+                    log = new WorkoutLog(date, rId, rName, notes, ts, completedVars);
                 }
                 cursor.close();
             }
@@ -512,10 +567,10 @@ public class GymDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public java.util.Map<String, WorkoutLog> getAllWorkoutLogsMap() {
-        java.util.Map<String, WorkoutLog> map = new java.util.HashMap<>();
+        java.util.Map<String, WorkoutLog> map = new java.util.LinkedHashMap<>();
         try {
             SQLiteDatabase db = getReadableDatabase();
-            Cursor cursor = db.query(TABLE_WORKOUT_LOGS, null, null, null, null, null, null);
+            Cursor cursor = db.query(TABLE_WORKOUT_LOGS, null, null, null, null, null, "date DESC, timestamp DESC");
             if (cursor != null) {
                 while (cursor.moveToNext()) {
                     String date = cursor.getString(cursor.getColumnIndexOrThrow("date"));
@@ -523,7 +578,12 @@ public class GymDatabaseHelper extends SQLiteOpenHelper {
                     String rName = cursor.getString(cursor.getColumnIndexOrThrow("routine_name"));
                     String notes = cursor.getString(cursor.getColumnIndexOrThrow("notes"));
                     long ts = cursor.getLong(cursor.getColumnIndexOrThrow("timestamp"));
-                    map.put(date, new WorkoutLog(date, rId, rName, notes, ts));
+                    String completedVars = "";
+                    int compIdx = cursor.getColumnIndex("completed_variations");
+                    if (compIdx != -1) {
+                        completedVars = cursor.getString(compIdx);
+                    }
+                    map.put(date, new WorkoutLog(date, rId, rName, notes, ts, completedVars));
                 }
                 cursor.close();
             }

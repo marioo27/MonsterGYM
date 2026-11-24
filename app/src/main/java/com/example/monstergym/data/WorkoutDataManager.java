@@ -224,6 +224,34 @@ public class WorkoutDataManager {
                 imageRes
         );
         variation.setSetWeights(setWeights);
+
+        boolean hasWarmup = varObj.optBoolean("has_warmup", false);
+        double warmupWeight = varObj.optDouble("warmup_weight", 0.0);
+        int warmupReps = varObj.optInt("warmup_reps", 10);
+
+        if ("variacion_jalon_maquina".equals(id)) {
+            hasWarmup = true;
+            warmupWeight = 32.0;
+            if ("Una serie de 32kg para calentar".equalsIgnoreCase(notas)) {
+                notas = "";
+                variation.setNotes("");
+            }
+        } else if ("variacion_remo_maquina".equals(id)) {
+            hasWarmup = true;
+            warmupWeight = 37.0;
+            if (notas != null && notas.toLowerCase().contains("calentar")) {
+                notas = "";
+                variation.setNotes("");
+            }
+        } else if ("variacion_sentadilla_jaca".equals(id)) {
+            hasWarmup = true;
+            warmupWeight = 0.0;
+        }
+
+        variation.setHasWarmupSet(hasWarmup);
+        variation.setWarmupWeight(warmupWeight);
+        variation.setWarmupReps(warmupReps);
+
         return variation;
     }
 
@@ -480,12 +508,14 @@ public class WorkoutDataManager {
         if (dbHelper != null) {
             dbHelper.saveWorkoutLog(log);
         }
+        exportJsonFile();
     }
 
     public synchronized void deleteWorkoutLog(String date) {
         if (dbHelper != null) {
             dbHelper.deleteWorkoutLog(date);
         }
+        exportJsonFile();
     }
 
     public synchronized WorkoutLog getWorkoutLog(String date) {
@@ -567,8 +597,11 @@ public class WorkoutDataManager {
                             String rName = logObj.has("routine_name") ? logObj.optString("routine_name", "") : logObj.optString("routineName", "");
                             String notes = logObj.optString("notes", "");
                             long timestamp = logObj.optLong("timestamp", System.currentTimeMillis());
-                            com.example.monstergym.model.WorkoutLog log = new com.example.monstergym.model.WorkoutLog(date, rId, rName, notes, timestamp);
-                            saveWorkoutLog(log);
+                            String completedVars = logObj.has("completed_variations") ? logObj.optString("completed_variations", "") : logObj.optString("completedVariations", "");
+                            com.example.monstergym.model.WorkoutLog log = new com.example.monstergym.model.WorkoutLog(date, rId, rName, notes, timestamp, completedVars);
+                            if (dbHelper != null) {
+                                dbHelper.saveWorkoutLog(log);
+                            }
                         }
                     }
                 }
@@ -613,6 +646,11 @@ public class WorkoutDataManager {
                                 varObj.put("name", var.getName() != null ? var.getName() : "");
                                 varObj.put("notes", var.getNotes() != null ? var.getNotes() : "");
                                 varObj.put("image", getImageName(appContext, var.getImageResource()));
+                                if (var.hasWarmupSet()) {
+                                    varObj.put("has_warmup", true);
+                                    varObj.put("warmup_weight", var.getWarmupWeight());
+                                    varObj.put("warmup_reps", var.getWarmupReps());
+                                }
 
                                 JSONArray seriesArray = new JSONArray();
                                 List<Double> weights = var.getSetWeights();
@@ -648,14 +686,26 @@ public class WorkoutDataManager {
 
             java.util.Map<String, com.example.monstergym.model.WorkoutLog> logsMap = getAllWorkoutLogsMap();
             if (logsMap != null && !logsMap.isEmpty()) {
+                List<com.example.monstergym.model.WorkoutLog> logList = new ArrayList<>(logsMap.values());
+                logList.sort((l1, l2) -> {
+                    String d1 = l1.getDate() != null ? l1.getDate() : "";
+                    String d2 = l2.getDate() != null ? l2.getDate() : "";
+                    int cmp = d2.compareTo(d1);
+                    if (cmp != 0) return cmp;
+                    return Long.compare(l2.getTimestamp(), l1.getTimestamp());
+                });
+
                 JSONArray logsArray = new JSONArray();
-                for (com.example.monstergym.model.WorkoutLog log : logsMap.values()) {
+                for (com.example.monstergym.model.WorkoutLog log : logList) {
                     JSONObject logObj = new JSONObject();
                     logObj.put("date", log.getDate() != null ? log.getDate() : "");
                     logObj.put("routine_id", log.getRoutineId() != null ? log.getRoutineId() : "");
                     logObj.put("routine_name", log.getRoutineName() != null ? log.getRoutineName() : "");
                     logObj.put("notes", log.getNotes() != null ? log.getNotes() : "");
                     logObj.put("timestamp", log.getTimestamp());
+                    if (!TextUtils.isEmpty(log.getCompletedVariations())) {
+                        logObj.put("completed_variations", log.getCompletedVariations());
+                    }
                     logsArray.put(logObj);
                 }
                 root.put("workout_logs", logsArray);

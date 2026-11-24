@@ -161,9 +161,10 @@ com.example.monstergym/
 ## 😈 Mascots & Avatars
 The app features customizable mascot characters for your routines and exercises:
 
-| Coach Purple | Hydration Blue | Strength Yellow |
+| Routine & Coach (Purple) | Hydration & Care (Blue) | Strength & Power (Yellow) |
 | :---: | :---: | :---: |
-| <img src="app/src/main/res-devils/drawable/devil_routine_see_purple.png" width="100"/> | <img src="app/src/main/res-devils/drawable/devil_water_blue.png" width="100"/> | <img src="app/src/main/res-devils/drawable/devil_muscle_yellow.png" width="100"/> |
+| <img src="app/src/main/res-devils/drawable/devil_routine_see_purple.png" alt="Devil Routine Purple" width="120"/> | <img src="app/src/main/res-devils/drawable/devil_water_blue.png" alt="Devil Water Blue" width="120"/> | <img src="app/src/main/res-devils/drawable/devil_muscle_yellow.png" alt="Devil Muscle Yellow" width="120"/> |
+| `devil_routine_see_purple` | `devil_water_blue` | `devil_muscle_yellow` |
 
 ## 📸 Screenshots
 *App screenshots will be added soon.*
@@ -321,9 +322,10 @@ com.example.monstergym/
 ## 😈 Avatares y Personajes
 La aplicación cuenta con avatares de personajes personalizados para tus rutinas y ejercicios:
 
-| Coach Púrpura | Hidratación Azul | Fuerza Amarillo |
+| Rutina y Entrenador (Púrpura) | Hidratación (Azul) | Fuerza y Músculo (Amarillo) |
 | :---: | :---: | :---: |
-| <img src="app/src/main/res-devils/drawable/devil_routine_see_purple.png" width="100"/> | <img src="app/src/main/res-devils/drawable/devil_water_blue.png" width="100"/> | <img src="app/src/main/res-devils/drawable/devil_muscle_yellow.png" width="100"/> |
+| <img src="app/src/main/res-devils/drawable/devil_routine_see_purple.png" alt="Diablillo Rutina Púrpura" width="120"/> | <img src="app/src/main/res-devils/drawable/devil_water_blue.png" alt="Diablillo Agua Azul" width="120"/> | <img src="app/src/main/res-devils/drawable/devil_muscle_yellow.png" alt="Diablillo Músculo Amarillo" width="120"/> |
+| `devil_routine_see_purple` | `devil_water_blue` | `devil_muscle_yellow` |
 
 ## 📸 Capturas de Pantalla
 *Las capturas de pantalla de la aplicación se añadirán próximamente.*

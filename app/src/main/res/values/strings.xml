@@ -75,6 +75,11 @@
     <string name="btn_create">Crear</string>
 
     <!-- Errors & Messages -->
+    <string name="label_same_weight_all_sets">Todas las series con el mismo peso</string>
+    <string name="label_warmup_set">Serie de calentamiento</string>
+    <string name="label_include_warmup_set">Incluir serie de calentamiento</string>
+    <string name="hint_warmup_weight">Peso de calentamiento</string>
+    <string name="hint_warmup_reps">Repeticiones de calentamiento</string>
     <string name="error_empty_variation_name">El nombre de la variación no puede estar vacío.</string>
     <string name="error_invalid_sets">Las series deben ser mayores que 0.</string>
     <string name="error_invalid_reps">Las repeticiones deben ser mayores que 0.</string>
@@ -89,6 +94,8 @@
     <string name="btn_calendar">Calendario de Entrenamientos</string>
     <string name="label_did_workout">¿Entrenaste este día?</string>
     <string name="label_select_routine">Selecciona la rutina realizada:</string>
+    <string name="label_select_exercises_done">Marcar ejercicios y variaciones realizados:</string>
+    <string name="label_extra_badge">EXTRA</string>
     <string name="label_log_notes">Notas opcionales</string>
     <string name="btn_delete_log">Eliminar registro</string>
     <string name="text_workout_logged">Entrenamiento registrado</string>
