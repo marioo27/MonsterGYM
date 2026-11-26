@@ -83,6 +83,30 @@
         android:textColor="@color/blue_primary"
         app:cornerRadius="12dp" />
 
+    <!-- Tutorial Demo Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnTutorialDemo"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginBottom="12dp"
+        android:text="📘 Ver Tutorial / Demo de la App"
+        app:strokeColor="#FF9800"
+        android:textColor="#FF9800"
+        app:cornerRadius="12dp" />
+
+    <!-- Reset Hints Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnResetHints"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginBottom="12dp"
+        android:text="🔄 Restablecer consejos de ayuda"
+        app:strokeColor="#78909C"
+        android:textColor="#37474F"
+        app:cornerRadius="12dp" />
+
     <!-- Credits Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCredits"

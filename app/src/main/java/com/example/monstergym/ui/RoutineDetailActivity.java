@@ -44,6 +44,8 @@ public class RoutineDetailActivity extends BaseActivity implements ExerciseAdapt
 
         binding.btnEditRoutineDetail.setOnClickListener(v -> showEditRoutineDialog());
         binding.fabAddExercise.setOnClickListener(v -> showCreateExerciseDialog());
+
+        com.example.monstergym.utils.TutorialHelper.showFirstTimeHint(this, "hint_routine_detail", "Añadir Ejercicios", "Aquí puedes crear y personalizar ejercicios y variaciones para esta rutina.");
     }
 
     @Override

@@ -20,8 +20,14 @@ import com.example.monstergym.databinding.DialogCreateRoutineBinding;
 import com.example.monstergym.databinding.DialogLogWorkoutBinding;
 import com.example.monstergym.databinding.DialogSettingsBinding;
 import com.example.monstergym.model.CalendarDay;
+import com.example.monstergym.model.Exercise;
+import com.example.monstergym.model.ExerciseVariation;
 import com.example.monstergym.model.Routine;
 import com.example.monstergym.model.WorkoutLog;
+
+import android.graphics.Color;
+import android.text.Html;
+import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -77,6 +83,11 @@ public class MainOptionsActivity extends BaseActivity implements CalendarGridAda
         });
 
         binding.cardStartNew.setOnClickListener(v -> showCreateRoutineDialog());
+
+        binding.cardThisWeek.setOnClickListener(v -> showWeeklyRecapDialog());
+        binding.cardCourse.setOnClickListener(v -> showCourseRecapDialog());
+
+        com.example.monstergym.utils.TutorialHelper.showFirstTimeHint(this, "hint_dashboard", "Bienvenido al Panel Principal", "Toca las tarjetas naranjas de <b>'🔥Esta semana🔥'</b> o <b>'🔥Este Curso🔥'</b> para ver un Mini Recap con tus recuentos <b>xN</b>.");
     }
 
     @Override
@@ -182,9 +193,150 @@ public class MainOptionsActivity extends BaseActivity implements CalendarGridAda
             dialog.dismiss();
         });
 
+        settingsBinding.btnTutorialDemo.setOnClickListener(v -> {
+            com.example.monstergym.utils.TutorialHelper.showFullAppTutorial(this);
+            dialog.dismiss();
+        });
+
+        settingsBinding.btnResetHints.setOnClickListener(v -> {
+            com.example.monstergym.utils.TutorialHelper.resetAllHints(this);
+        });
+
         settingsBinding.btnCredits.setOnClickListener(v -> {
             showCreditsDialog();
         });
+    }
+
+    private void showWeeklyRecapDialog() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+        int daysSinceMonday = (dayOfWeek == Calendar.SUNDAY) ? 6 : (dayOfWeek - Calendar.MONDAY);
+        cal.add(Calendar.DATE, -daysSinceMonday);
+        long mondayMillis = cal.getTimeInMillis();
+
+        cal.add(Calendar.DATE, 7);
+        long nextMondayMillis = cal.getTimeInMillis();
+
+        List<WorkoutLog> filteredLogs = new ArrayList<>();
+        for (WorkoutLog log : logsMap.values()) {
+            try {
+                java.util.Date d = dateFormat.parse(log.getDate());
+                if (d != null) {
+                    long t = d.getTime();
+                    if (t >= mondayMillis && t < nextMondayMillis) {
+                        filteredLogs.add(log);
+                    }
+                }
+            } catch (Exception ignored) {}
+        }
+
+        showPeriodRecapDialog("Recap: Esta Semana", filteredLogs);
+    }
+
+    private void showCourseRecapDialog() {
+        Calendar today = Calendar.getInstance();
+        int y = today.get(Calendar.YEAR);
+        int m = today.get(Calendar.MONTH);
+        int startYear = m >= Calendar.SEPTEMBER ? y : y - 1;
+        String startDateStr = String.format(Locale.US, "%04d-09-01", startYear);
+
+        List<WorkoutLog> filteredLogs = new ArrayList<>();
+        for (WorkoutLog log : logsMap.values()) {
+            if (log.getDate() != null && log.getDate().compareTo(startDateStr) >= 0) {
+                filteredLogs.add(log);
+            }
+        }
+
+        showPeriodRecapDialog("Recap: Este Curso", filteredLogs);
+    }
+
+    private void showPeriodRecapDialog(String title, List<WorkoutLog> logs) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<b>Total de días entrenados: ").append(logs.size()).append("</b><br/><br/>");
+
+        if (logs.isEmpty()) {
+            sb.append("<i>No hay registros de entrenamiento en este período.</i>");
+        } else {
+            Map<String, Integer> routineCounts = new HashMap<>();
+            Map<String, Integer> exerciseCounts = new HashMap<>();
+
+            for (WorkoutLog log : logs) {
+                String rName = !TextUtils.isEmpty(log.getRoutineName()) ? log.getRoutineName() : "General";
+                routineCounts.put(rName, routineCounts.getOrDefault(rName, 0) + 1);
+
+                if (!TextUtils.isEmpty(log.getCompletedVariations())) {
+                    String[] items = log.getCompletedVariations().split(",");
+                    for (String item : items) {
+                        if (!item.trim().isEmpty()) {
+                            exerciseCounts.put(item.trim(), exerciseCounts.getOrDefault(item.trim(), 0) + 1);
+                        }
+                    }
+                }
+            }
+
+            sb.append("<font color='#FF9800'><b>📋 Rutinas completadas:</b></font><br/>");
+            for (Map.Entry<String, Integer> entry : routineCounts.entrySet()) {
+                sb.append("• ").append(entry.getKey()).append(" <b>(x").append(entry.getValue()).append(")</b><br/>");
+            }
+
+            if (!exerciseCounts.isEmpty()) {
+                sb.append("<br/><font color='#1976D2'><b>🏋️ Ejercicios y Variaciones:</b></font><br/>");
+                List<Routine> allRoutines = WorkoutDataManager.getInstance().getRoutines();
+                for (Map.Entry<String, Integer> entry : exerciseCounts.entrySet()) {
+                    String itemKey = entry.getKey();
+                    String displayName = itemKey;
+                    if (itemKey.contains("::")) {
+                        String[] parts = itemKey.split("::");
+                        if (parts.length == 2) {
+                            String exId = parts[0];
+                            String varId = parts[1];
+                            for (Routine r : allRoutines) {
+                                if (r.getExercises() != null) {
+                                    for (Exercise ex : r.getExercises()) {
+                                        if (ex.getId().equals(exId) && ex.getVariations() != null) {
+                                            for (ExerciseVariation v : ex.getVariations()) {
+                                                if (v.getId().equals(varId)) {
+                                                    displayName = ex.getDisplayName(this) + " (" + v.getDisplayName(this) + ")";
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    sb.append("• ").append(displayName).append(" <b>(x").append(entry.getValue()).append(")</b><br/>");
+                }
+            }
+        }
+
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_tutorial_hint, null);
+        TextView tvTitle = dialogView.findViewById(R.id.tvHintTitle);
+        TextView tvMessage = dialogView.findViewById(R.id.tvHintMessage);
+        View cbDontShowAgain = dialogView.findViewById(R.id.cbDontShowAgain);
+        com.google.android.material.button.MaterialButton btnGotIt = dialogView.findViewById(R.id.btnGotIt);
+
+        if (cbDontShowAgain != null) cbDontShowAgain.setVisibility(View.GONE);
+        tvTitle.setText("🔥 " + title);
+        tvMessage.setText(Html.fromHtml(sb.toString(), Html.FROM_HTML_MODE_LEGACY));
+        btnGotIt.setText("Cerrar");
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
+
+        btnGotIt.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        }
     }
 
     private void showCreditsDialog() {

@@ -206,10 +206,14 @@
 
                     <!-- Box 1: Streak This Week -->
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardThisWeek"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginEnd="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="4dp"
                         app:cardBackgroundColor="#CC1E293B"
@@ -246,10 +250,14 @@
 
                     <!-- Box 2: Streak This Course -->
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardCourse"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginStart="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="4dp"
                         app:cardBackgroundColor="#CC1E293B"

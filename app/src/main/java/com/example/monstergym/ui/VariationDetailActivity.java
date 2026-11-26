@@ -77,6 +77,8 @@ public class VariationDetailActivity extends BaseActivity {
         binding.btnSaveVariation.setOnClickListener(v -> saveVariation());
         binding.btnCancelVariation.setOnClickListener(v -> finish());
         binding.btnDeleteVariation.setOnClickListener(v -> confirmDeleteVariation());
+
+        com.example.monstergym.utils.TutorialHelper.showFirstTimeHint(this, "hint_variation_detail", "Configurar Variación", "Puedes marcar <b>'Todas las series con el mismo peso'</b> para ahorrar tiempo o incluir una <b>'Serie de calentamiento'</b> con su peso específico.");
     }
 
     private void setupToolbar() {

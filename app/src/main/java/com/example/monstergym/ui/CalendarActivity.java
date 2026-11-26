@@ -59,6 +59,8 @@ public class CalendarActivity extends BaseActivity implements WorkoutLogAdapter.
         refreshAllData();
 
         binding.btnLogDay.setOnClickListener(v -> showLogWorkoutDialog(selectedDateStr));
+
+        com.example.monstergym.utils.TutorialHelper.showFirstTimeHint(this, "hint_calendar", "Mi Calendario", "Toca cualquier día para registrar o ver el resumen de los ejercicios completados en esa fecha.");
     }
 
     private String formatDateStr(int year, int monthZeroBased, int day) {
