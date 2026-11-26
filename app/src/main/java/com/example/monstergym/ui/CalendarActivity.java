@@ -558,7 +558,8 @@ public class CalendarActivity extends BaseActivity implements WorkoutLogAdapter.
 
             List<com.example.monstergym.model.ExerciseVariation> variations = ex.getVariations();
             if (variations != null && !variations.isEmpty()) {
-                for (com.example.monstergym.model.ExerciseVariation var : variations) {
+                for (int vIdx = 0; vIdx < variations.size(); vIdx++) {
+                    com.example.monstergym.model.ExerciseVariation var = variations.get(vIdx);
                     com.google.android.material.checkbox.MaterialCheckBox cb = new com.google.android.material.checkbox.MaterialCheckBox(context);
                     String itemKey = ex.getId() + "::" + var.getId();
                     cb.setTag(itemKey);
@@ -570,7 +571,7 @@ public class CalendarActivity extends BaseActivity implements WorkoutLogAdapter.
                     cb.setPadding(16, 0, 0, 0);
 
                     if (isNewLog) {
-                        cb.setChecked(!ex.isExtra());
+                        cb.setChecked(!ex.isExtra() && vIdx == 0);
                     } else {
                         cb.setChecked(savedSet.contains(itemKey) || savedSet.contains(var.getId()));
                     }

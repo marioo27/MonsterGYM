@@ -29,10 +29,12 @@
 - 🔄 **Drag & Drop Reordering**: Seamlessly reorder routines, exercises, and exercise variations using touch drag handles powered by `ItemTouchHelper`.
 - 😈 **Dynamic Devil Image Selector**: Customize routine, exercise, and variation avatars by choosing from available mascot illustrations. Custom picture selections are preserved across JSON exports and imports.
 - 🏋️ **Exercises & Extra Tags**: Add exercises to any routine, featuring a dedicated **EXTRA** badge for accessory exercises.
-- ⚖️ **Set Weights & Per-Set Tracking**: Dynamically configure sets, repetitions, and individual weights per set.
-- 📅 **Main Screen Workout Calendar & Counters**: Interactive Monday-starting monthly calendar directly on the dashboard, displaying workout abbreviations inside orange circles for completed days.
-- ⚙️ **Settings & JSON Backup**: Settings dialog featuring weight unit configuration, routine JSON backup export to Downloads, routine JSON file import, and developer credits.
-- 💾 **Real-time SQLite Persistence**: Automatic local persistence using SQLite (`monstergym.db`) alongside synchronized continuous JSON exports (`gymRoutine.json`).
+- ⚖️ **Set Weights, Same Weight & Warm-up Sets**: Configure sets, reps, and per-set weights. Includes one-tap *"Same weight for all sets"* mode and dedicated *"Warm-up set"* configuration.
+- 📅 **Interactive Calendar & Day Workout Recaps**: Tap any date on the calendar to log or inspect completed exercises, variations, and notes directly on daily cards.
+- 🔥 **Streak Cards & Mini Recaps (`xN`)**: Tap the weekly or course streak cards on the dashboard to open a mini recap dialog displaying workout counts (`xN`) by routine and exercise.
+- 📘 **Interactive App Tutorial & Smart Hints**: Consult the step-by-step app demo/tutorial anytime from Settings, with automated first-touch feature hints and reset options.
+- ⚙️ **Settings & JSON Backup**: Settings dialog featuring weight unit configuration, routine JSON backup export/import, tutorial demo, and developer credits.
+- 💾 **Real-time SQLite Persistence & Chronological JSON Sync**: Automatic local persistence using SQLite (`monstergym.db`) alongside synchronized continuous JSON exports (`gymRoutine.json`) sorted chronologically (newest date first).
 
 ## 📱 User Requirements
 - Android 7.0 (API 24) or higher.
@@ -166,8 +168,19 @@ The app features customizable mascot characters for your routines and exercises:
 | <img src="app/src/main/res-devils/drawable/devil_routine_see_purple.png" alt="Devil Routine Purple" width="120"/> | <img src="app/src/main/res-devils/drawable/devil_water_blue.png" alt="Devil Water Blue" width="120"/> | <img src="app/src/main/res-devils/drawable/devil_muscle_yellow.png" alt="Devil Muscle Yellow" width="120"/> |
 | `devil_routine_see_purple` | `devil_water_blue` | `devil_muscle_yellow` |
 
-## 📸 Screenshots
-*App screenshots will be added soon.*
+## 📸 Screenshots & Graphics
+Below is a showcase of the app's visual identity, mascot characters, and playstore assets:
+
+| Main Logo | Extra Badge | Mascot Characters |
+| :---: | :---: | :---: |
+| <img src="ic_logo-playstore.png" alt="Monster GYM Logo" width="130"/> | <img src="ic_extra-playstore.png" alt="Monster GYM Extra Badge" width="130"/> | <img src="app/src/main/res-devils/drawable/devil_routine_see_purple.png" alt="Mascot Coach" width="130"/> |
+
+### 😈 Exercise Avatars & Character Gallery
+
+| Upper Body / Coach | Legs & Jumping | Arms & Strength | Back & Rowing |
+| :---: | :---: | :---: | :---: |
+| <img src="app/src/main/res-devils/drawable/devil_routine_see_purple.png" width="100"/> | <img src="app/src/main/res-devils/drawable/devil_dumbell_jumping_purple.png" width="100"/> | <img src="app/src/main/res-devils/drawable/devil_muscle_yellow.png" width="100"/> | <img src="app/src/main/res-devils/drawable/devil_row_purple.png" width="100"/> |
+| `devil_routine_see_purple` | `devil_dumbell_jumping_purple` | `devil_muscle_yellow` | `devil_row_purple` |
 
 ## 📄 Licensing & Attribution
 - **License**: This project is distributed under the [MIT License](LICENSE).
@@ -188,12 +201,14 @@ The app features customizable mascot characters for your routines and exercises:
 ## ✨ Características Principales
 - 📋 **Gestión de Rutinas y Abreviaturas**: Crea, edita, duplica y elimina rutinas de entrenamiento con abreviaturas personalizadas para el calendario.
 - 🔄 **Reordenamiento por Arrastre (Drag & Drop)**: Reorganiza tus rutinas, ejercicios y variaciones de forma fluida mediante tiradores de arrastre táctiles.
-- 😈 **Selector Dinámico de Diablillos**: Personaliza los avatares de tus rutinas, ejercicios y variaciones eligiendo entre las ilustraciones de diablillos disponibles. Las fotos personalizadas se conservan en las exportaciones e importaciones JSON.
+- 😈 **Selector Dinámico de Diablillos**: Personaliza los avatares de tus rutinas, ejercicios y variaciones eligiendo entre las ilustraciones de diablillos disponibles.
 - 🏋️ **Ejercicios y Etiqueta EXTRA**: Añade ejercicios y marca elementos accesorios con la etiqueta **EXTRA**.
-- ⚖️ **Series y Pesos**: Configura número de series, repeticiones y pesos individuales por serie.
-- 📅 **Calendario y Contadores**: Calendario mensual interactivo en la pantalla principal con abreviaturas en círculos naranjas y contadores de días de entrenamiento.
-- ⚙️ **Ajustes y Respaldo JSON**: Menú de ajustes con exportación e importación de archivos JSON de rutinas.
-- 💾 **Persistencia Real en SQLite**: Almacenamiento local mediante SQLite (`monstergym.db`) y sincronización con `gymRoutine.json`.
+- ⚖️ **Series, Mismo Peso y Serie de Calentamiento**: Configura series, repeticiones y peso. Incluye la casilla *"Todas las series con el mismo peso"* y configuración de *"Serie de calentamiento"*.
+- 📅 **Calendario Interactivo y Recap por Día**: Toca cualquier número de día en el calendario para registrar o consultar de un vistazo los ejercicios y variaciones completados esa fecha.
+- 🔥 **Rachas y Mini Recap (`xN`)**: Pulsa sobre las tarjetas naranjas de *"Esta semana"* o *"Este curso"* en el panel principal para ver un resumen desglosado con recuentos (**xN**) de entrenamientos.
+- 📘 **Tutorial Interactivo y Consejos de Ayuda**: Consulta la demo/tutorial completa en Ajustes y recibe consejos emergentes guiados la primera vez que usas cada pantalla.
+- ⚙️ **Ajustes y Respaldo JSON**: Menú de ajustes con selección de unidad de peso, exportación/importación JSON, tutorial interactivo y créditos.
+- 💾 **Persistencia SQLite y Sincronización JSON Cronológica**: Almacenamiento activo mediante SQLite (`monstergym.db`) y exportación continua en JSON (`gymRoutine.json`) ordenada con la fecha más reciente primero.
 
 ## 📱 Requisitos de Usuario
 - Android 7.0 (API 24) o superior.
@@ -327,8 +342,19 @@ La aplicación cuenta con avatares de personajes personalizados para tus rutinas
 | <img src="app/src/main/res-devils/drawable/devil_routine_see_purple.png" alt="Diablillo Rutina Púrpura" width="120"/> | <img src="app/src/main/res-devils/drawable/devil_water_blue.png" alt="Diablillo Agua Azul" width="120"/> | <img src="app/src/main/res-devils/drawable/devil_muscle_yellow.png" alt="Diablillo Músculo Amarillo" width="120"/> |
 | `devil_routine_see_purple` | `devil_water_blue` | `devil_muscle_yellow` |
 
-## 📸 Capturas de Pantalla
-*Las capturas de pantalla de la aplicación se añadirán próximamente.*
+## 📸 Capturas e Identidad Visual
+Muestra de la identidad gráfica, logotipos y personajes de la aplicación:
+
+| Logotipo Principal | Insignia Extra | Personaje Entrenador |
+| :---: | :---: | :---: |
+| <img src="ic_logo-playstore.png" alt="Monster GYM Logo" width="130"/> | <img src="ic_extra-playstore.png" alt="Monster GYM Extra Badge" width="130"/> | <img src="app/src/main/res-devils/drawable/devil_routine_see_purple.png" alt="Mascot Coach" width="130"/> |
+
+### 😈 Galería de Avatares y Personajes
+
+| Tren Superior / Coach | Pierna y Salto | Brazo y Fuerza | Espalda y Remo |
+| :---: | :---: | :---: | :---: |
+| <img src="app/src/main/res-devils/drawable/devil_routine_see_purple.png" width="100"/> | <img src="app/src/main/res-devils/drawable/devil_dumbell_jumping_purple.png" width="100"/> | <img src="app/src/main/res-devils/drawable/devil_muscle_yellow.png" width="100"/> | <img src="app/src/main/res-devils/drawable/devil_row_purple.png" width="100"/> |
+| `devil_routine_see_purple` | `devil_dumbell_jumping_purple` | `devil_muscle_yellow` | `devil_row_purple` |
 
 ## 📄 Licencias y Atribución
 - **Licencia**: Este proyecto se distribuye bajo la [Licencia MIT](License).
